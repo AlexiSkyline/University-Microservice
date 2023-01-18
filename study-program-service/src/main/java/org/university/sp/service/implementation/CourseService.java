@@ -52,7 +52,12 @@ public class CourseService implements ICourseService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Course> findAllCoursesByProfessorId(Long professorId) {
-        return null;
+    public List<Course> findAllByProfessorId(Long professorId) {
+        List<Course> courseList = this.courseRepository.findAllByProfessorId(professorId);
+        courseList.forEach(course -> {
+            course.setSubjects(course.getSubjects().stream()
+                    .filter(subject -> subject.getProfessorId().equals(professorId)).toList());
+        });
+        return courseList;
     }
 }

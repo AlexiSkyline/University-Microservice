@@ -36,6 +36,15 @@ public class SubjectController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("professor/{professorId}")
+    public ResponseEntity<List<Subject>> findAllSubjectsByProfessorId(@PathVariable Long professorId) {
+        List<Subject> subjectList = this.subjectService.findAllByProfessorId(professorId);
+        if (subjectList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(subjectList);
+    }
+
     @PutMapping("{id}")
     public ResponseEntity<Subject> updateSubject(@PathVariable Long id, @RequestBody Subject subject) {
         Optional<Subject> foundSubject = this.subjectService.findById(id);

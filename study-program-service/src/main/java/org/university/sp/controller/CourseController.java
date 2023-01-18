@@ -38,7 +38,7 @@ public class CourseController {
 
     @GetMapping("professor/{professorId}")
     public ResponseEntity<List<Course>> findAllCoursesByProfessorId(@PathVariable Long professorId) {
-        List<Course> courseList = this.courseService.findAllCoursesByProfessorId(professorId);
+        List<Course> courseList = this.courseService.findAllByProfessorId(professorId);
         if (courseList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

@@ -49,4 +49,9 @@ public class SubjectService implements ISubjectService {
         }
         return null;
     }
+
+    @Override
+    public List<Subject> findAllByProfessorId(Long professorId) {
+        return this.subjectRepository.findAllByProfessorId(professorId);
+    }
 }

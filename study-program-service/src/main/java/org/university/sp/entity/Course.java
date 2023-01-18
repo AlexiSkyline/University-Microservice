@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 import java.util.List;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -19,7 +20,7 @@ public class Course {
     private Long id;
     private String name;
     private Integer semester;
-    @ManyToMany(fetch = LAZY)
+    @ManyToMany(fetch = EAGER)
     @JoinTable(
             name = "course_subject",
             joinColumns = @JoinColumn(name = "course_id"),
