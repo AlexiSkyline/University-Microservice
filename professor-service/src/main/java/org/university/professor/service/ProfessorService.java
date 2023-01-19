@@ -33,6 +33,12 @@ public class ProfessorService implements IProfessorService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Professor> findAllByMajorId(Long majorId) {
+        return this.professorRepository.findAllByMajorId(majorId);
+    }
+
+    @Override
     @Transactional
     public Professor update(Professor professor) {
         return this.professorRepository.save(professor);

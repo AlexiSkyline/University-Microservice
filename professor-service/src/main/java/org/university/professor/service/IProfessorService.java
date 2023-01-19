@@ -9,6 +9,7 @@ public interface IProfessorService {
     Professor save(Professor professor);
     List<Professor> findAll();
     Optional<Professor> findById(Long id);
+    List<Professor> findAllByMajorId(Long majorId);
     Professor update(Professor professor);
     Professor delete(Long id);
 }
