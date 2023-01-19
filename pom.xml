@@ -15,6 +15,7 @@
     <modules>
         <module>study-program-service</module>
         <module>professor-service</module>
+        <module>student-service</module>
     </modules>
 
     <properties>
