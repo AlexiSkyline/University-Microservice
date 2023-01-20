@@ -9,7 +9,7 @@ import org.university.professor.dto.SubjectDTO;
 
 import java.util.List;
 
-@FeignClient(name = "study-program-service", url = "http://localhost:8081/study-program")
+@FeignClient(name = "study-program-service")
 public interface StudyProgramService {
     @GetMapping("majors/{id}")
     MajorDTO getMajorById(@PathVariable("id") Long id);

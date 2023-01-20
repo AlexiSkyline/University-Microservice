@@ -8,7 +8,7 @@ import org.university.student.dto.GradeDTO;
 
 import java.util.List;
 
-@FeignClient(name = "grades-service", url = "http://localhost:8082")
+@FeignClient(name = "grades-service")
 @RequestMapping("/grades")
 public interface GradeService {
     @GetMapping("student/{studentId}")
