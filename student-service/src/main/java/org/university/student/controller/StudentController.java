@@ -3,10 +3,15 @@ package org.university.student.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.university.student.dto.CourseDTO;
+import org.university.student.dto.MajorDTO;
 import org.university.student.entity.Student;
+import org.university.student.feignclients.StudyProgramService;
 import org.university.student.service.IStudentService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -14,6 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StudentController {
     private final IStudentService studentService;
+    private final StudyProgramService studyProgramService;
 
     @PostMapping
     public ResponseEntity<Student> saveStudent(@RequestBody Student student) {
@@ -41,6 +47,27 @@ public class StudentController {
         Optional<Student> foundStudent = this.studentService.findByRegistration(registration);
         return foundStudent.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("major/{majorId}")
+    public ResponseEntity<Map<String, Object>> findAllStudentByMajorId(@PathVariable Long majorId) {
+        MajorDTO foundMajor = this.studyProgramService.getMajorById(majorId);
+        List<Student> studentList = this.studentService.findByMajorId(majorId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("majorInfo", foundMajor);
+        response.put("studentList", studentList);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("course/{courseId}")
+    public ResponseEntity<Map<String, Object>> findAllStudentByCourseId(@PathVariable Long courseId) {
+        CourseDTO foundCourse = this.studyProgramService.getCourseById(courseId);
+        List<Student> studentList = this.studentService.findByCourseId(courseId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("curseInfo", foundCourse);
+        response.put("studentList", studentList);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("{id}")
