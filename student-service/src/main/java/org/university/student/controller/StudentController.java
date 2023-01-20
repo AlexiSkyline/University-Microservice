@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.university.student.dto.CourseDTO;
+import org.university.student.dto.GradeDTO;
 import org.university.student.dto.MajorDTO;
+import org.university.student.dto.SubjectDTO;
 import org.university.student.entity.Student;
+import org.university.student.feignclients.GradeService;
 import org.university.student.feignclients.StudyProgramService;
 import org.university.student.service.IStudentService;
 
@@ -20,6 +23,7 @@ import java.util.Optional;
 public class StudentController {
     private final IStudentService studentService;
     private final StudyProgramService studyProgramService;
+    private final GradeService gradeService;
 
     @PostMapping
     public ResponseEntity<Student> saveStudent(@RequestBody Student student) {
@@ -67,6 +71,29 @@ public class StudentController {
         Map<String, Object> response = new HashMap<>();
         response.put("curseInfo", foundCourse);
         response.put("studentList", studentList);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("{id}/subjects")
+    public ResponseEntity<Map<String, Object>> findAllSubjectsByStudentId(@PathVariable Long id) {
+        Optional<Student> student = this.studentService.findById(id);
+        if (student.isEmpty() || student.get().getCourseId() == null) {
+            return ResponseEntity.notFound().build();
+        }
+        List<SubjectDTO> subjectList = this.studyProgramService
+                .getAllSubjectByCourseId(student.get().getCourseId());
+        List<GradeDTO> gradeList = this.gradeService.getAllGradesByStudentId(id);
+        for (SubjectDTO subjectDTO : subjectList) {
+            for (GradeDTO gradeDTO : gradeList) {
+                if (subjectDTO.getId().equals(gradeDTO.getSubjectId())) {
+                    subjectDTO.setFinalGrade(gradeDTO.getFinalGrade());
+                }
+            }
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("studentInfo", student.get());
+        response.put("subjectList", subjectList);
         return ResponseEntity.ok(response);
     }
 

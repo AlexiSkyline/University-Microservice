@@ -51,6 +51,12 @@ public class SubjectService implements ISubjectService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Subject> findAllSubjectsByCourseId(Long courseId) {
+        return this.subjectRepository.findAllSubjectsByCourseId(courseId);
+    }
+
+    @Override
     public List<Subject> findAllByProfessorId(Long professorId) {
         return this.subjectRepository.findAllByProfessorId(professorId);
     }
